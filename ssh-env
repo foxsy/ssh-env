@@ -1,0 +1,27 @@
+#!/bin/bash
+
+function _ssh_env() {
+  key="${SSH_DEFAULT}"
+  [[ $# -ge 1 ]] && key="${1}"
+  
+  export GIT_SSH_COMMAND="ssh -i $key"
+
+}
+
+function _ssh_unset() {
+  unset GIT_SSH_COMMAND
+}
+
+function _ssh_list_keys() {
+
+  while read line; do
+      echo "$line";
+  done < <(ls -1 ~/.ssh/* | sed -e 's/\.pub$//' | sort | uniq | grep -v known_hosts);
+};
+
+alias ssh-switch="_ssh_env"
+alias ssh-unset="_ssh_unset"
+alias ssh-list="_ssh_list_keys"
+alias ssh-which="echo ${SSH_DEFAULT}"
+
+ssh-switch
