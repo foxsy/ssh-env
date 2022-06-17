@@ -1,7 +1,8 @@
 #!/bin/bash
 
 function _ssh_env() {
-  key="${SSH_DEFAULT}"
+  export SSH_CURRENT="${1}"
+  key=""
   if [[ $# -ge 1 ]] && key="${1}"
     then
       export GIT_SSH_COMMAND="ssh -i $key"
@@ -10,12 +11,15 @@ function _ssh_env() {
     then
       keys="$(_ssh_list_keys | fzf --prompt "keys: " -m)"
       export GIT_SSH_COMMAND="ssh -i $keys"
+      unset SSH_CURRENT
+      export SSH_CURRENT="${keys}"
   fi
-
 }
 
 function _ssh_unset() {
   unset GIT_SSH_COMMAND
+  unset SSH_DEFAULT
+  unset SSH_CURRENT
 }
 
 function _ssh_list_keys() {
@@ -28,6 +32,6 @@ function _ssh_list_keys() {
 alias ssh-switch="_ssh_env"
 alias ssh-unset="_ssh_unset"
 alias ssh-list="_ssh_list_keys"
-alias ssh-which="echo ${SSH_DEFAULT}"
+alias ssh-which='echo $SSH_CURRENT'
 
-ssh-switch
+ssh-switch ${SSH_DEFAULT}
