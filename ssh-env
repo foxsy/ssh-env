@@ -2,9 +2,15 @@
 
 function _ssh_env() {
   key="${SSH_DEFAULT}"
-  [[ $# -ge 1 ]] && key="${1}"
-  
-  export GIT_SSH_COMMAND="ssh -i $key"
+  if [[ $# -ge 1 ]] && key="${1}"
+    then
+      export GIT_SSH_COMMAND="ssh -i $key"
+  fi
+  if [[ $# -le 0 ]] && command -v fzf
+    then
+      keys="$(_ssh_list_keys | fzf --prompt "keys: " -m)"
+      export GIT_SSH_COMMAND="ssh -i $keys"
+  fi
 
 }
 
