@@ -5,7 +5,7 @@ Include `ssh-env` in your bash profile config (~/.profile,  ~/.bash_profile, or 
 
 ```
  # SSH Default key
- export SSH_DEFAULT=~/.ssh/id_25519
+ export SSH_DEFAULT=~/.ssh/id_ed25519
  . ~/bin/ssh-env
 ```
 
